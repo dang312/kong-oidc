@@ -61,13 +61,8 @@ function handle(oidcConfig)
     end
   end
 
-  if response == nil and oidcConfig.anonymous == "true" then
-    ngx.log(ngx.DEBUG, "OidcHandler hanlding the anonymous condition, path: " .. ngx.var.request_uri)
-    utils.setAnonymousConsumer()
-    return
-  end 
 
-  if response == nil then
+  if response == nil and oidcConfig.anonymous ~= "true"  then
     response = make_oidc(oidcConfig)
     if response then
       if response.user or response.id_token then
@@ -94,6 +89,11 @@ function handle(oidcConfig)
       end
     end
   end
+
+  if response == nil and oidcConfig.anonymous == "true" then
+    ngx.log(ngx.DEBUG, "OidcHandler hanlding the anonymous condition, path: " .. ngx.var.request_uri)
+    utils.setAnonymousConsumer()
+  end 
 end
 
 function make_oidc(oidcConfig)
