@@ -87,7 +87,8 @@ function M.get_options(config, ngx)
     proxy_opts = {
       http_proxy  = config.http_proxy,
       https_proxy = config.https_proxy
-    }
+    },
+    anonymous = config.anonymous
   }
 end
 

@@ -56,7 +56,7 @@ function handle(oidcConfig)
     end
   end
 
-  if response == nil then
+  if response == nil and oidcConfig.anonymous ~= "true" then
     response = make_oidc(oidcConfig)
     if response then
       if response.user or response.id_token then
