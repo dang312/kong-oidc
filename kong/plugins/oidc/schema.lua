@@ -39,5 +39,6 @@ return {
     bearer_jwt_auth_signing_algs = { type = "array", required = true, default = { "RS256" } },
     header_names = { type = "array", required = true, default = {} },
     header_claims = { type = "array", required = true, default = {} },
+    anonymous = { type = "string", required = false, default = "false" },
   }
 }
