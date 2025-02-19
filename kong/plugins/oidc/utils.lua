@@ -137,7 +137,7 @@ local function set_consumer(consumer, credential)
 end
 
 function M.setAnonymousConsumer()
-  local cred =  { id = "anonymous" }
+  local cred =  { id = "anonymous", username = "anonymous" }
   kong.client.authenticate(nil, cred)
   ngx.log(ngx.DEBUG, "OidcHandler setAnonymousConsumer success, path: " .. ngx.var.request_uri)
 end
