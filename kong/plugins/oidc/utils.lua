@@ -136,6 +136,10 @@ local function set_consumer(consumer, credential)
   end
 end
 
+function M.setAnonymousConsumer()
+  kong.client.authenticate(nil, "anonymous")
+end
+
 function M.injectAccessToken(accessToken, headerName, bearerToken)
   ngx.log(ngx.DEBUG, "Injecting " .. headerName)
   local token = accessToken
