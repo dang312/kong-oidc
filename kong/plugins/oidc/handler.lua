@@ -107,6 +107,7 @@ function make_oidc(oidcConfig)
 
   if err then
     if err == 'unauthorized request' then
+      ngx.log(ngx.DEBUG, "OidcHandler introspect fail, return authorized..., requested path: " .. ngx.var.request_uri)
       utils.exit(ngx.HTTP_UNAUTHORIZED, err, ngx.HTTP_UNAUTHORIZED)
     else
       if oidcConfig.recovery_page_path then
@@ -121,6 +122,7 @@ end
 
 function introspect(oidcConfig)
   if utils.has_bearer_access_token() or oidcConfig.bearer_only == "yes" then
+    ngx.log(ngx.DEBUG, "OidcHandler BEGIN introspect , requested path: " .. ngx.var.request_uri)
     local res, err
     if oidcConfig.use_jwks == "yes" then
       res, err = require("resty.openidc").bearer_jwt_verify(oidcConfig)
@@ -130,6 +132,7 @@ function introspect(oidcConfig)
     if err then
       if oidcConfig.bearer_only == "yes" then
         ngx.header["WWW-Authenticate"] = 'Bearer realm="' .. oidcConfig.realm .. '",error="' .. err .. '"'
+        ngx.log(ngx.DEBUG, "OidcHandler introspect fail, return authorized..., requested path: " .. ngx.var.request_uri)
         utils.exit(ngx.HTTP_UNAUTHORIZED, err, ngx.HTTP_UNAUTHORIZED)
       end
       return nil
