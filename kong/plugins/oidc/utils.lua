@@ -137,8 +137,27 @@ local function set_consumer(consumer, credential)
 end
 
 function M.setAnonymousConsumer()
-  local cred =  { id = "anonymous", username = "anonymous" }
-  kong.client.authenticate(nil, cred)
+
+  local credential =  { id = "anonymous", username = "anonymous" }
+  
+  kong.client.authenticate(nil, credential)
+  local set_header = kong.service.request.set_header
+  local clear_header = kong.service.request.clear_header
+
+  if credential and credential.sub then
+    set_header(constants.HEADERS.CREDENTIAL_IDENTIFIER, credential.username)
+  else
+    clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
+  end
+
+  clear_header(constants.HEADERS.CREDENTIAL_USERNAME)
+
+  if credential then
+    clear_header(constants.HEADERS.ANONYMOUS)
+  else
+    set_header(constants.HEADERS.ANONYMOUS, true)
+  end
+
   ngx.log(ngx.DEBUG, "OidcHandler setAnonymousConsumer success, path: " .. ngx.var.request_uri)
 end
 
