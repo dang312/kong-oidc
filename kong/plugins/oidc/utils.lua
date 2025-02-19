@@ -139,12 +139,12 @@ end
 function M.setAnonymousConsumer()
 
   local credential =  { id = "anonymous", username = "anonymous" }
-  
+
   kong.client.authenticate(nil, credential)
   local set_header = kong.service.request.set_header
   local clear_header = kong.service.request.clear_header
 
-  if credential and credential.sub then
+  if credential and credential.username then
     set_header(constants.HEADERS.CREDENTIAL_IDENTIFIER, credential.username)
   else
     clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
